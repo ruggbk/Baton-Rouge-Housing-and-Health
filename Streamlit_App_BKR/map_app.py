@@ -5,10 +5,15 @@ import seaborn as sns
 import folium
 import numpy as np
 from streamlit_folium import st_folium
+from pathlib import Path
 import json
 
-# Load GeoJSON as plain JSON
-with open(r'../Output Data/housing_data_with_geometry.geojson') as f:
+
+# Load GeoJSON as plain JSON, using a path relative to the repo root
+repo_root = Path(__file__).resolve().parents[1]
+geojson_path = repo_root / "Output Data" / "housing_data_with_geometry.geojson"
+
+with open(geojson_path, "r", encoding="utf-8") as f:
     geojson_data = json.load(f)
 
 # Convert properties to a DataFrame
