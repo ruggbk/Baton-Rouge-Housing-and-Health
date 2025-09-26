@@ -1,7 +1,8 @@
 streamlit
-geopandas
+geopandas==1.1.0
 matplotlib
 seaborn
 folium
 numpy
 streamlit-folium
+GDAL==3.6.4
