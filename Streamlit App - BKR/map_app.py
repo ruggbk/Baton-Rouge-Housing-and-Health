@@ -1,13 +1,18 @@
 import streamlit as st
-import geopandas as gpd
+import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 import folium
 import numpy as np
 from streamlit_folium import st_folium
+import json
 
-# Load GeoJSON
-gdf = gpd.read_file(r'../Output Data/housing_data_with_geometry.geojson')
+# Load GeoJSON as plain JSON
+with open(r'../Output Data/housing_data_with_geometry.geojson') as f:
+    geojson_data = json.load(f)
+
+# Convert properties to a DataFrame
+gdf = pd.DataFrame([feature['properties'] for feature in geojson_data['features']])
 
 # Page title
 st.title("Comparison of Baton Rouge Housing Data")
@@ -41,9 +46,9 @@ selected_var = st.selectbox("Select variable to plot:", numeric_cols)
 # Create Folium map
 m = folium.Map(location=[30.4615, -91.1371], zoom_start=10)
 
-# Add choropleth
+# Add choropleth using raw JSON
 folium.Choropleth(
-    geo_data=gdf,
+    geo_data=geojson_data,
     data=gdf,
     columns=['GEOID', selected_var],
     key_on='feature.properties.GEOID',
@@ -61,7 +66,6 @@ st.markdown("---")
 ### Correlation matrix
 
 st.subheader("Correlation Matrix of Selected Variables")
-
 
 # Compute correlation matrix
 corr_matrix = gdf[numeric_cols].corr()
@@ -83,14 +87,13 @@ sns.heatmap(
 ax.set_title("Correlation Matrix (Lower Triangle)")
 st.pyplot(fig)
 
-
 st.markdown("---")
 
 ### Explore correlations in more detail
 st.subheader("Explore Correlation Between Variables")
 # Dropdowns for x and y
-var_x = st.selectbox("Select X variable:", numeric_cols)
-var_y = st.selectbox("Select Y variable:", numeric_cols)
+var_x = st.selectbox("Select X variable:", numeric_cols, index=0)
+var_y = st.selectbox("Select Y variable:", numeric_cols, index=1)
 
 # Scatter plot
 fig, ax = plt.subplots()
