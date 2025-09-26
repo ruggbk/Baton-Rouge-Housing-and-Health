@@ -1,8 +1,13 @@
-streamlit
-geopandas==1.1.0
-matplotlib
-seaborn
-folium
-numpy
-streamlit-folium
-GDAL==3.6.4
+streamlit==1.26.0
+numpy==1.26.2
+pandas==2.1.1
+matplotlib==3.8.0
+seaborn==0.12.2
+folium==0.14.0
+streamlit-folium==0.11.1
+
+# Geo dependencies
+shapely==2.1.1
+fiona==1.9.4
+pyproj==3.6.0
+geopandas==0.13.0
